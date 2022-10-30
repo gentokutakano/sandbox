@@ -176,7 +176,58 @@ module.hot.accept(reloadCSS);
 "use strict";
 
 require("./styles.css");
-document.getElementById("app").innerHTML = "\n<h1>Hello Vanilla!</h1>\n<div>\n  We use the same configuration as Parcel to bundle this sandbox, you can find more\n  info about Parcel \n  <a href=\"https://parceljs.org\" target=\"_blank\" rel=\"noopener noreferrer\">here</a>.\n</div>\n";
+var onClickAdd = function onClickAdd() {
+  var inputText = document.getElementById("add-text").value;
+  document.getElementById("add-text").value = "";
+  createIncompleteList(inputText);
+};
+var deleteFromIncompleteList = function deleteFromIncompleteList(value) {
+  var deleteTarget = value.parentNode;
+  document.getElementById("incomplete-list").removeChild(deleteTarget);
+};
+var deleteFromCompleteList = function deleteFromCompleteList(value) {
+  var deleteTarget = value.parentNode;
+  document.getElementById("complete-list").removeChild(deleteTarget);
+};
+var createIncompleteList = function createIncompleteList(text) {
+  var div = document.createElement("div");
+  div.className = "list-row";
+  var li = document.createElement("li");
+  li.innerText = text;
+  var completeButton = document.createElement("button");
+  completeButton.innerText = "完了";
+  completeButton.addEventListener("click", function () {
+    deleteFromIncompleteList(completeButton);
+    var deleteTarget = completeButton.parentNode;
+    var div2 = document.createElement("div");
+    div2.className = "list-row";
+    var completeText = deleteTarget.querySelector("li").innerText;
+    var li2 = document.createElement("li");
+    li2.innerText = completeText;
+    div2.appendChild(li);
+    var backButton = document.createElement("button");
+    backButton.innerText = "戻す";
+    backButton.addEventListener("click", function () {
+      deleteFromCompleteList(backButton);
+      var text = backButton.parentNode.querySelector("li").innerText;
+      createIncompleteList(text);
+    });
+    div2.appendChild(backButton);
+    document.getElementById("complete-list").appendChild(div2);
+  });
+  var deleteButton = document.createElement("button");
+  deleteButton.innerText = "削除";
+  deleteButton.addEventListener("click", function () {
+    deleteFromIncompleteList(deleteButton);
+  });
+  div.appendChild(li);
+  div.appendChild(completeButton);
+  div.appendChild(deleteButton);
+  document.getElementById("incomplete-list").appendChild(div);
+};
+document.getElementById("add-button").addEventListener("click", function () {
+  return onClickAdd();
+});
 },{"./styles.css":"src/styles.css"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
